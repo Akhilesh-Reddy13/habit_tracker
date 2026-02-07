@@ -1,5 +1,35 @@
 use std::io;
 
+struct Habit {
+    name: String,
+    completed: u32,
+}
+
+impl Habit {
+
+    fn complete(&mut self) {
+        self.completed += 1;
+    }
+
+    fn display(&self) {
+        println!("{} completed {} times.",self.name,self.completed);
+    }
+}
+
+fn add_habit() {
+    let mut habit = Habit {
+        name: String::new(),
+        completed: 0
+    };
+
+    io::stdin()
+        .read_line(&mut habit.name)
+        .expect("Failed to read a line");
+    
+    habit.complete();
+    habit.display();
+
+}
 
 fn main() {
     
@@ -20,7 +50,7 @@ fn main() {
         };
 
         match choice {
-            1 => println!("Entered adding habit function!"),
+            1 => add_habit(),
             2 => println!("Entered view habit function!"),
             3 => println!("Entered complete habit function!"),
             4 => println!("Entered view stats function!"),
