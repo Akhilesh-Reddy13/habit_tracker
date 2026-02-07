@@ -16,27 +16,45 @@ impl Habit {
     }
 }
 
-fn add_habit() {
-    let mut habit = Habit {
+fn add_habit(habits:&mut Vec<Habit>) {
+    let mut input = Habit {
         name: String::new(),
         completed: 0
     };
+    
+    println!("Enter the habit to track ");
 
     io::stdin()
-        .read_line(&mut habit.name)
+        .read_line(&mut input.name)
         .expect("Failed to read a line");
     
-    habit.complete();
-    habit.display();
+    input.name = input.name.trim().to_string();
+    habits.push(input);
+    println!("Added the habit ");
 
+}
+
+fn view_habit(habits: &Vec<Habit>) {
+    println!("These are the habits are being recorded ");
+
+    if habits.is_empty() {
+        println!("Add habits to view !");
+    
+    } else {
+    for habit in habits.iter() {
+        habit.display();
+    }
+    }
 }
 
 fn main() {
     
     println!("Welcome to habit tracker !");
+    
+    let mut habit: Vec<Habit> = Vec::new();
 
     'tracker: loop {
-        println!("1.Add Habit \n 2.View Habits \n 3.Complete Habit \n 4.View Stats \n 5.Reset stats \n 6.Exit");
+        println!(" 1.Add Habit \n 2.View Habits \n 3.Complete Habit \n 4.View Stats \n 5.Reset stats \n 6.Exit");
         
         let mut choice = String::new();
 
@@ -48,10 +66,11 @@ fn main() {
             Ok(num) => num,
             Err(_) => continue,
         };
+        
 
         match choice {
-            1 => add_habit(),
-            2 => println!("Entered view habit function!"),
+            1 => add_habit(&mut habit),
+            2 => view_habit(&habit),
             3 => println!("Entered complete habit function!"),
             4 => println!("Entered view stats function!"),
             5 => println!("Entered reset stats function!"),
