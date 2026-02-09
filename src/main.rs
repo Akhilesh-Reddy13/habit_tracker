@@ -75,6 +75,31 @@ fn complete_habit(habits: &mut Vec<Habit>) {
     }
 }
 
+fn view_stats(habits: &Vec<Habit>) {
+    let mut comp = 0;
+    let mut uncomp = 0;
+
+    for habit in habits.iter() {
+        if habit.completed == 0 {
+            uncomp += 1;
+        } else {
+            comp += 1;
+        }
+    }
+
+    println!( "You completed {comp} tasks ");
+    println!("Yet to do are {uncomp} tasks");
+
+}
+
+fn reset_stats(habits: &mut Vec<Habit>) {
+    println!("The habit scores are being reset "); 
+
+    for habit in habits.iter_mut() {
+        habit.completed = 0;
+    }
+}
+
 fn main() {
     
     println!("Welcome to habit tracker !");
@@ -100,8 +125,8 @@ fn main() {
             1 => add_habit(&mut habits),
             2 => view_habit(&habits),
             3 => complete_habit(&mut habits),
-            4 => println!("Entered view stats function!"),
-            5 => println!("Entered reset stats function!"),
+            4 => view_stats(&habits),
+            5 => reset_stats(&mut habits),
             6 => break 'tracker,
             0 | 7..=u32::MAX => println!("Invalid Choice !"),
     }
