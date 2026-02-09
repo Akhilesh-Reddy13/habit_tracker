@@ -14,6 +14,10 @@ impl Habit {
     fn display(&self) {
         println!("{} completed {} times.",self.name,self.completed);
     }
+
+    fn display_habit(&self , index : u32) {
+        println!("{index}. {}",self.name);
+    }
 }
 
 fn add_habit(habits:&mut Vec<Habit>) {
@@ -41,9 +45,33 @@ fn view_habit(habits: &Vec<Habit>) {
         println!("Add habits to view !");
     
     } else {
-    for habit in habits.iter() {
-        habit.display();
+    for (index,habit) in habits.iter().enumerate() {
+        habit.display_habit(index.try_into().unwrap());
     }
+    }
+}
+
+fn complete_habit(habits: &mut Vec<Habit>) {
+    println!("Enter the id of the habit to mark it complete \n");
+
+    let mut index = String::new();
+
+    io::stdin()
+        .read_line(&mut index)
+        .expect("Failed to read a line");
+
+    let index:u32 = match index.trim().parse() {
+        Ok(num) => num,
+        Err(_) => return ,
+    };
+
+    for (ind,habit) in habits.iter_mut().enumerate() {
+        if index == ind.try_into().unwrap() {
+            habit.complete();
+            habit.display();
+        } else {
+            continue ; 
+        }
     }
 }
 
@@ -51,7 +79,7 @@ fn main() {
     
     println!("Welcome to habit tracker !");
     
-    let mut habit: Vec<Habit> = Vec::new();
+    let mut habits: Vec<Habit> = Vec::new();
 
     'tracker: loop {
         println!(" 1.Add Habit \n 2.View Habits \n 3.Complete Habit \n 4.View Stats \n 5.Reset stats \n 6.Exit");
@@ -69,9 +97,9 @@ fn main() {
         
 
         match choice {
-            1 => add_habit(&mut habit),
-            2 => view_habit(&habit),
-            3 => println!("Entered complete habit function!"),
+            1 => add_habit(&mut habits),
+            2 => view_habit(&habits),
+            3 => complete_habit(&mut habits),
             4 => println!("Entered view stats function!"),
             5 => println!("Entered reset stats function!"),
             6 => break 'tracker,
